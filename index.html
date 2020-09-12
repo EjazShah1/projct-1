@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body
+        {
+            background-color: lightyellow;
+        }
+        .form
+        {
+            position: absolute;
+            left: 42%;
+            top: 30%;
+        }
+        .search
+        {
+            height: 6vh;
+            width: 120%;
+        }
+        ul
+        {
+        margin-top: 0%; 
+         
+        }
+        ul>li
+        {
+
+            list-style-type: none;
+            text-align: center;
+            transform: translateY(10%);
+            /* margin-top: 15%; */
+            height: 6vh;
+            width:120%;
+            border: 1px solid grey;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <form action="" class="form">
+        <input type="text" class="search" name="" id="" placeholder="city or state">
+        <ul>
+            <li>Filter For a City</li>
+            <li>Or a state</li>
+        </ul>
+        <ul></ul>
+    </form>
+</body>
+<script>
+    const endpoint='https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json'
+    const cities=[]
+    fetch(endpoint)
+    .then(blob=>blob.json())
+    .then(data=>cities.push(...data))
+
+    function findtomatch(value,cities){
+        return cities.filter(place=>{
+            const rx=new RegExp(value,"gi")
+
+            return place.city.match(rx) ||place.state.match(rx)||place.population.match(rx)
+
+
+        })
+
+    }
+    let ul=document.querySelector("ul")
+    function displaydata(){
+        let x=this.value
+        let res=findtomatch(x,cities)
+        console.log(res);
+    
+        let html= res.map(place1=>{
+           return ul.innerHTML=` <li>${place1.city}  ${place1.state}</li>`
+            
+         })
+         ul.innerHTML=html
+         
+    
+
+
+    }
+    let search =document.querySelector(".search")
+    search.addEventListener("keyup",displaydata)
+
+    
+
+</script>
+</html>
